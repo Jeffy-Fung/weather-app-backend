@@ -1,19 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// GET /api
-router.get('/', (req, res) => {
-  res.json({ message: 'Weather API is working!' });
-});
-
-// GET /api/weather
-router.get('/weather', (req, res) => {
-  res.json({
-    weather: 'sunny',
-    temperature: 25,
-    humidity: 60,
-    location: 'New York'
-  });
-});
+// API v1 routes
+router.use('/v1/weather', require('./weather'));
 
 module.exports = router;
