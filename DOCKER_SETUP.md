@@ -112,11 +112,6 @@ npm run docker:clean    # Clean up
    curl http://localhost:${PORT:-3000}/api/v1/weather/current?lang=en
    ```
 
-3. **Cache Info:**
-   ```bash
-   curl http://localhost:${PORT:-3000}/api/v1/weather/cache?lang=en
-   ```
-
 4. **Redis Commander (if enabled):**
    - Open http://localhost:8081 in your browser
 

@@ -6,8 +6,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test:cache": "node test-cache.js",
-    "test:redis": "node test-redis-connection.js",
+
     "docker:build": "docker build -t weather-app-backend .",
     "docker:run": "docker run -p ${PORT:-3000}:3000 --env-file .env weather-app-backend",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up --build",

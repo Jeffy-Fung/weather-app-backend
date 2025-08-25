@@ -94,10 +94,6 @@ npm run docker:clean    # Clean up volumes and containers
 - GET /api/v1/weather/current - Get current weather data
   - Query params: `lang` (tc, sc, en) - default: tc
   - Returns cached data if available (5-minute TTL)
-- DELETE /api/v1/weather/cache - Clear weather cache
-  - Query params: `lang` (optional) - if not provided, clears all weather cache
-- GET /api/v1/weather/cache - Get cache information
-  - Query params: `lang` (tc, sc, en) - default: tc
 
 ## Environment Variables
 
@@ -133,7 +129,6 @@ REDIS_URL=redis://your-cluster.xxxxx.cache.amazonaws.com:6379
 ### Local Development
 - `npm start` - Start production server
 - `npm run dev` - Start development server with nodemon
-- `npm run test:cache` - Test Redis caching functionality
 
 ### Docker Commands
 - `npm run docker:dev` - Start in development mode with hot reloading
