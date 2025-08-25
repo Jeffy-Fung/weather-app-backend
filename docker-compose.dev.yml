@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # Redis service (same as production)
+  redis:
+    image: redis:7-alpine
+    container_name: weather-app-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_dev:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - weather-app-network-dev
+
+  # Weather App Backend service (development mode)
+  weather-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: weather-app-backend-dev
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - weather-app-network-dev
+    volumes:
+      # Mount source code for hot reloading
+      - .:/app
+      - /app/node_modules
+      - ./logs:/app/logs
+    command: npm run dev
+
+  # Redis Commander (optional - for Redis management UI)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: weather-app-redis-commander-dev
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - weather-app-network-dev
+    profiles:
+      - tools
+
+volumes:
+  redis_data_dev:
+    driver: local
+
+networks:
+  weather-app-network-dev:
+    driver: bridge

@@ -1,0 +1,29 @@
+# Docker Compose override file for local development
+# This file will be automatically used by docker-compose
+
+version: '3.8'
+
+services:
+  # Override Redis configuration for local development
+  redis:
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+  # Override weather app for local development
+  weather-app:
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./logs:/app/logs
+    ports:
+      - "${PORT:-3000}:3000"
+
+  # Enable Redis Commander by default in override
+  redis-commander:
+    profiles: []
+    ports:
+      - "8081:8081"
