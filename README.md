@@ -95,6 +95,9 @@ npm run docker:clean    # Clean up volumes and containers
   - Query params: `lang` (tc, sc, en) - default: tc
   - Returns cached data if available (5-minute TTL)
 
+**Data Source:** This weather API integrates with the [Hong Kong Observatory Open Data API](https://data.weather.gov.hk/weatherAPI/doc/HKO_Open_Data_API_Documentation_tc.pdf) to provide real-time weather information for Hong Kong.
+
+
 ## Environment Variables
 
 - `PORT` - Server port (default: 3000)
