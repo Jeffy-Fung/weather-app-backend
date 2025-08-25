@@ -48,24 +48,16 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api', require('./routes/index'));
 
-// Graceful shutdown
-process.on('SIGINT', async () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  await redisClient.disconnect();
-  process.exit(0);
-});
+// Initialize Redis immediately (for Vercel)
+initializeRedis();
 
-process.on('SIGTERM', async () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  await redisClient.disconnect();
-  process.exit(0);
-});
+// Export the app for Vercel
+module.exports = app;
 
-// Start server
-app.listen(PORT, async () => {
-  console.log('🚀 Server is running on port ' + PORT);
-  console.log('🏥 Health check: http://localhost:' + PORT + '/health');
-  
-  // Initialize Redis after server starts
-  await initializeRedis();
-});
+// Only start the server if we're not on Vercel
+if (process.env.NODE_ENV !== 'production' || process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log('🚀 Server is running on port ' + PORT);
+    console.log(' Health check: http://localhost:' + PORT + '/health');
+  });
+}
