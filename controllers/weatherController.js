@@ -53,6 +53,32 @@ const serialize_result_data = (result) => {
   const uniqueUnits = [...new Set(allUsedUnit)];
   if (uniqueUnits.length > 1) throw new Error('Rainfall data has multiple units');
 
+  const uvindex = data.uvindex;
+  const uvindexData = uvindex === "" ? {
+    unit: null,
+    place: null,
+    value: null,
+    recordDesc: null,
+  } : {
+    unit: uvindex?.data[0]?.unit,
+    place: uvindex?.data[0]?.place,
+    value: uvindex?.data[0]?.value,
+    recordDesc: uvindex?.recordDesc,
+  }
+
+  const humidity = data.humidity;
+  const humidityData = humidity === "" ? {
+    unit: null,
+    place: null,
+    value: null,
+    recordTime: null,
+  } : {
+    unit: humidity?.data[0]?.unit,
+    place: humidity?.data[0]?.place,
+    value: humidity?.data[0]?.value,
+    recordTime: humidity?.recordTime,
+  }
+
   return {
     data: {
       averageRainfall: {
@@ -68,14 +94,8 @@ const serialize_result_data = (result) => {
       },
       specialWxTips: data.specialWxTips,
       warningMessage: data.warningMessage,
-      uvindex: {
-        ...data.uvindex.data[0],
-        recordDesc: data.uvindex.recordDesc,
-      },
-      humidity: {
-        ...data.humidity.data[0],
-        recordTime: data.humidity.recordTime,
-      },
+      uvindex: uvindexData,
+      humidity: humidityData,
       updateTime: data.updateTime,
       tcmessage: data.tcmessage,
     },
